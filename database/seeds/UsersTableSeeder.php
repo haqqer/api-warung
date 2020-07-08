@@ -27,25 +27,25 @@ class UsersTableSeeder extends Seeder
         );
         DB::table('users')->insert(
             [
-                'full_name' => 'pimpinan proyek',
-                'username' => 'pimpinan',
-                'email' => 'pimpinan@email.com',
-                'role' => 'pimpinan',
-                'password' => Hash::make('pimpinan123'),
+                'full_name' => 'pedagang',
+                'username' => 'pedagang',
+                'email' => 'pedagang@email.com',
+                'role' => 'user',
+                'password' => Hash::make('pedagan123'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
         );
-        DB::table('users')->insert(
-            [
-                'full_name' => 'petugas proyek',
-                'username' => 'petugas',
-                'email' => 'petugas@email.com',
-                'role' => 'petugas',
-                'password' => Hash::make('petugas123'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()                
-            ]
-        );
+        // DB::table('users')->insert(
+        //     [
+        //         'full_name' => 'petugas proyek',
+        //         'username' => 'petugas',
+        //         'email' => 'petugas@email.com',
+        //         'role' => 'petugas',
+        //         'password' => Hash::make('petugas123'),
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()                
+        //     ]
+        // );
     }
 }
