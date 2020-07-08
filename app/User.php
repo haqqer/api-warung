@@ -48,18 +48,28 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
     
-    public function projects()
+    public function warung()
     {
-        return $this->hasMany('App\Project');
+        return $this->hasMany('App\Warung');
     }
 
-    public function posts()
+    public function food()
     {
-        return $this->hasMany('App\Post');
+        return $this->hasMany('App\Food');
     }
 
     public function comments()
     {
         return $this->hasMany('App\Comment');
+    }
+
+    public function photoWarung()
+    {
+        return $this->hasMany('App\PhotoWarung');
+    }
+
+    public function photoFood()
+    {
+        return $this->hasMany('App\PhotoFood');
     }
 }
