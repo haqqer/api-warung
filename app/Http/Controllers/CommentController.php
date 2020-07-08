@@ -15,12 +15,12 @@ class CommentController extends RespondController
     public function index(Request $request)
     {
         try {
-            if($request->query('post_id')) {
-                $comments = Comment::where('post_id', $request->query('post_id'))->paginate();    
+            if($request->query('warung_id')) {
+                $comments = Comment::where('warung_id', $request->query('warung_id'))->paginate();    
             }
             else 
             {
-                $comments = Comment::with(['post'])->paginate();
+                $comments = Comment::paginate();
             }
             return $this->sendResponse(true, "get all comments", 200, $comments);
         } catch (Exception $e) {

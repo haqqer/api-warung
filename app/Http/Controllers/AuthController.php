@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Carbon;
 
 class AuthController extends RespondController
 {
     public function __construct() 
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'me']]);
     }
 
     protected function validator(Request $request)
@@ -41,7 +46,7 @@ class AuthController extends RespondController
     public function login(Request $request) 
     {
         $credentials = $request->only('email', 'password');
-        if($token = $this->guard()->attempt($credentials))
+        if($token = $this->guard()->attempt($credentials, ['exp' => Carbon\Carbon::now()->addDays(3)->timestamp]))
         {
             return $this->respondWithToken($token);
         }
@@ -52,7 +57,24 @@ class AuthController extends RespondController
 
     public function me()
     {
-        return response()->json($this->guard()->auth()->user());
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (TokenExpiredException $e) {
+
+            return response()->json(['token_expired' => 400]);
+
+        } catch (TokenInvalidException $e) {
+
+            return response()->json(['token_invalid' => 400]);
+
+        } catch (JWTException $e) {
+
+            return response()->json(['token_absent' => 400]);
+        }
+        return response()->json(compact('user'));
     }
 
     public function logout()
