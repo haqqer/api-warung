@@ -28,18 +28,18 @@ Route::group([
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::get('me', 'AuthController@me')->middleware('jwt.verify');
 });
 
 Route::middleware(['jwt.verify', 'cors'])->group(function () {
     // Projects Endpoint
-    Route::get('projects/filter', 'ProjectController@filter');
-    Route::get('projects/count', 'ProjectController@count');
-    Route::resource('projects', 'ProjectController');
+    Route::get('warungs/filter', 'WarungController@filter');
+    Route::get('warungs/count', 'WarungController@count');
+    Route::resource('warungs', 'WarungController');
     // Posts Endpoint
-    Route::get('posts/filter', 'PostController@filter');
-    Route::get('posts/count', 'PostController@count');
-    Route::resource('posts', 'PostController');
+    Route::get('foods/filter', 'FoodController@filter');
+    Route::get('foods/count', 'FoodController@count');
+    Route::resource('foods', 'FoodController');
     // Comments Endpoint
     Route::resource('comments', 'CommentController');
     Route::resource('photos', 'PhotoController');
