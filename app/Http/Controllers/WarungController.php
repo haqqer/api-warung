@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Warung;
 use App\PhotoWarung;
+use App\Comment;
 use Illuminate\Http\Request;
 use Exception;
 use JWTAuth;
@@ -68,7 +69,8 @@ class WarungController extends RespondController
      */
     public function show(Warung $warung)
     {
-        $data= Warung::where('id', $warung->id)->with('photos', 'foods', 'foods.photos', 'comments')->get();
+        $data= Warung::where('id', $warung->id)->with('photos', 'foods', 'foods.photos', 'comments')->first();
+        $data->average = $data->comments()->avg('score');
         return $this->sendResponse(true, "show warung", 200, $data);
     }
 
