@@ -162,17 +162,30 @@ class FoodController extends RespondController
         return $user;
     }
 
+    // public function uploadImage(Request $request, $user_id, $food_id)
+    // {
+    //     $image = $request->file('image');
+    //     $image_storage = 'upload';
+    //     $image_name = 'img_'.time();
+    //     $image->move($image_storage, $image_name);
+    //     $photo = PhotoFood::create([
+    //         'user_id' => $user_id,
+    //         'food_id' => $food_id,
+    //         'path' => 'public/upload/'.$image_name.'.'.$image->getClientOriginalExtension(),
+    //     ]);
+    //     return $image_name;
+    // }
     public function uploadImage(Request $request, $user_id, $food_id)
     {
         $image = $request->file('image');
         $image_storage = 'upload';
-        $image_name = 'img_'.time();
+        $image_name = 'img_'.(microtime(true)*10000).'.'.$image->getClientOriginalExtension();
         $image->move($image_storage, $image_name);
         $photo = PhotoFood::create([
             'user_id' => $user_id,
             'food_id' => $food_id,
-            'path' => 'public/upload/'.$image_name.'.'.$image->getClientOriginalExtension(),
+            'path' => $image_name,
         ]);
         return $image_name;
-    }
+    }    
 }
