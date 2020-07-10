@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
+use Exception;
+use JWTAuth;
+use DB;
 
 class CommentController extends RespondController
 {
@@ -46,7 +49,13 @@ class CommentController extends RespondController
      */
     public function store(Request $request)
     {
-        $comment = Comment::create($request->all());
+        $comment = Comment::create([
+            'user_id' => $this->user()->id,
+            'warung_id' => $request->warung_id,
+            'comment' => $request->comment,
+            'status' => $request->status, 
+            'score' => $request->score
+        ]); 
         return $this->sendResponse(true, "create comment", 201, $comment);
     }
 
@@ -91,6 +100,14 @@ class CommentController extends RespondController
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
+
+    public function user() {
+        $token = JWTAuth::getToken();
+        // $user = JWTAuth::getPayload($token)->toArray();
+        $user = JWTAuth::toUser($token);
+        return $user;
+    }
+
     public function destroy(Comment $comment)
     {
         $comment->delete();
